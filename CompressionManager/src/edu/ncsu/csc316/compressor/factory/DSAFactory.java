@@ -35,24 +35,19 @@ public class DSAFactory {
 	/**
 	 * Returns a data structure that implements an unordered map
 	 * 
-	 * @param <K>
-	 *            - the key type
-	 * @param <V>
-	 *            - the value type
+	 * @param <K> - the key type
+	 * @param <V> - the value type
 	 * @return a data structure that implements an unordered map
 	 */
 	public static <K, V> Map<K, V> getUnorderedMap() {
 		return getUnorderedArrayMap();
-		//TODO: you can change what specific type of data structure is being returned
 	}
 
 	/**
 	 * Returns a data structure that implements an ordered map
 	 * 
-	 * @param <K>
-	 *            - the key type
-	 * @param <V>
-	 *            - the value type
+	 * @param <K> - the key type
+	 * @param <V> - the value type
 	 * @return a data structure that implements an ordered map
 	 */
 	public static <K extends Comparable<K>, V> Map<K, V> getOrderedMap() {
@@ -62,8 +57,7 @@ public class DSAFactory {
 	/**
 	 * Returns a data structure that implements an index-based list
 	 * 
-	 * @param <E>
-	 *            - the element type
+	 * @param <E> - the element type
 	 * @return an index-based list
 	 */
 	public static <E> List<E> getIndexedList() {
@@ -73,8 +67,7 @@ public class DSAFactory {
 	/**
 	 * Returns a data structure that implements an positional list
 	 * 
-	 * @param <E>
-	 *            - the element type
+	 * @param <E> - the element type
 	 * @return a positional list
 	 */
 	public static <E> PositionalList<E> getPositionalList() {
@@ -84,8 +77,7 @@ public class DSAFactory {
 	/**
 	 * Returns a comparison based sorter
 	 * 
-	 * @param <E>
-	 *            - the element type
+	 * @param <E> - the element type
 	 * @return a comparison based sorter
 	 */
 	public static <E extends Comparable<E>> Sorter<E> getComparisonSorter() {
@@ -95,8 +87,7 @@ public class DSAFactory {
 	/**
 	 * Returns a non-comparison based sorter
 	 * 
-	 * @param <E>
-	 *            - the element type
+	 * @param <E> - the element type
 	 * @return a non-comparison based sorter
 	 */
 	public static <E extends Identifiable> Sorter<E> getNonComparisonSorter() {
@@ -106,8 +97,7 @@ public class DSAFactory {
 	/**
 	 * Returns a data structure that implements a stack
 	 * 
-	 * @param <E>
-	 *            - the element type
+	 * @param <E> - the element type
 	 * @return a stack
 	 */
 	public static <E> Stack<E> getStack() {
@@ -117,8 +107,7 @@ public class DSAFactory {
 	/**
 	 * Returns a data structure that implements a queue
 	 * 
-	 * @param <E>
-	 *            - the element type
+	 * @param <E> - the element type
 	 * @return a stack
 	 */
 	public static <E> Queue<E> getQueue() {
@@ -268,4 +257,5 @@ public class DSAFactory {
 	private static <E> ArrayBasedQueue<E> getArrayBasedQueue() {
 		return new ArrayBasedQueue<E>();
 	}
+
 }
