@@ -18,7 +18,7 @@ import edu.ncsu.csc316.dsa.map.SkipListMap;
  * 
  * @author Dr. King
  * @author Gianna Mastrandrea
- * @author <YOUR NAME HERE>
+ * @author Jason Hurst
  *
  */
 public class CompressionManager {
@@ -27,7 +27,7 @@ public class CompressionManager {
 	 * Initializes CompressionMananger
 	 */
 	public CompressionManager() {
-		//TODO: complete this constructor as needed
+		// TODO: complete this constructor as needed
 	}
 
 	/**
@@ -37,13 +37,11 @@ public class CompressionManager {
 	 * 
 	 * For example, if the input file is:
 	 * 
-	 *    Baby shark
-	 *    I do not know the rest of this song
+	 * Baby shark | I do not know the rest of this song
 	 * 
 	 * Then the returned list would be
 	 * 
-	 *    at index 0: Baby shark
-	 *    at index 1: I do not know the rest of this song
+	 * at index 0: Baby shark at index 1: I do not know the rest of this song
 	 * 
 	 * @param pathToInputFile the path to the input file to be processed
 	 * @param outputDirectory the directory where the processed file should be saved
@@ -51,7 +49,7 @@ public class CompressionManager {
 	 * @throws FileNotFoundException
 	 */
 	public List<String> processFile(String pathToInputFile, String outputDirectory) throws FileNotFoundException {
-		//TODO: complete this method
+		// TODO: complete this method
 		// Consider calling the getCompressed or getDecompressed helper methods
 	}
 
@@ -61,85 +59,138 @@ public class CompressionManager {
 	 * 
 	 * For example, if the file being compressed contains the text:
 	 * 
-	 *    Baby shark
-	 *    I do not know the rest of this song
+	 * Baby shark | I do not know the rest of this song
 	 * 
 	 * Then the input list would be
 	 * 
-	 *    at index 0: Baby shark
-	 *    at index 1: I do not know the rest of this song
+	 * at index 0: Baby shark at index 1: I do not know the rest of this song
 	 * 
 	 * @param fileLines the list of lines of text in the input file
 	 * @return a list of strings that represent the compressed output
 	 */
 	public List<String> getCompressed(List<String> fileLines) {
-		//TODO: complete this method
+		SkipListMap<String, Integer> wordMap = new SkipListMap<String, Integer>();
+		ArrayBasedList<String> compressed = new ArrayBasedList<String>();
+		int wordCount = 1;
+
+		for (int i = 0; i < fileLines.size(); i++) {
+			Scanner wordScanner = new Scanner(fileLines.get(i));
+			wordScanner.useDelimiter(" ");
+
+			// Gets a word from line of text
+			while (wordScanner.hasNext()) {
+				String current = wordScanner.next();
+				// Strips the word of punctuation
+				String bareWord = current.replaceAll("[^a-zA-Z'-]", "");
+
+				// Only inserted on first time word is encountered
+				if (wordMap.get(bareWord) == null) {
+					wordMap.put(bareWord, wordCount);
+					wordCount++;
+				}
+			}
+			for (Entry<String, Integer> e : wordMap.entrySet()) {
+				// Replaces all instances of a word with its key
+				String temp = fileLines.get(i).replaceAll(e.getKey(), Integer.toString(e.getValue()));
+				// Replaces the first instance of each key with its word
+				temp = temp.replaceFirst(Integer.toString(e.getValue()), e.getKey());
+				compressed.addLast(temp);
+			}
+			wordScanner.close();
+		}
+		return compressed;
 	}
 
-	
 	/**
 	 * Deompresses the input list that represents the specified input file, then
-	 * returns a list of strings that represent each line of the decompressed output.
+	 * returns a list of strings that represent each line of the decompressed
+	 * output.
 	 * 
 	 * For example, if the file being decompressed contains the text:
 	 * 
-	 *    Baby shark
-	 *    I do not know the rest of this song
+	 * Baby shark | I do not know the rest of this song
 	 * 
 	 * Then the input list would be:
 	 * 
-	 *    at index 0: Baby shark
-	 *    at index 1: I do not know the rest of this song
+	 * at index 0: Baby shark at index 1: I do not know the rest of this song
 	 * 
 	 * @param fileLines the list of lines of text in the input file
 	 * @return a list of strings that represent the compressed output
-	 */	
+	 */
 	public List<String> getDecompressed(List<String> fileLines) {
-		//TODO: complete this method
+		SkipListMap<Integer, String> wordMap = new SkipListMap<Integer, String>();
+		ArrayBasedList<String> uncompressed = new ArrayBasedList<String>();
+		int wordCount = 1;
+		
+		for (int i = 0; i < fileLines.size(); i++) {
+			Scanner wordScanner = new Scanner(fileLines.get(i));
+			wordScanner.useDelimiter(" ");
+			
+			// Gets a word from line of text
+			while (wordScanner.hasNext()) {
+				String currentWord = wordScanner.next();
+				// Strips the word or number of punctuation
+				String bareWord = currentWord.replaceAll("[^a-zA-Z0-9'-]", "");
+				// If bare word is not a number, add it to wordMap
+				try {
+					Integer.parseInt(bareWord);
+				} catch (Exception e) {
+					wordMap.put(wordCount, bareWord);
+					wordCount++;
+				}
+			}
+			for (Entry<Integer, String> e : wordMap.entrySet()) {
+				// Replaces all instances of a number with its word
+				String temp = fileLines.get(i).replaceAll(Integer.toString(e.getKey()), e.getValue());
+				uncompressed.addLast(temp);
+			}
+			wordScanner.close();
+		}
+		return uncompressed;
 	}
 
 	/**
-	 * Generates a report of the most frequently appearing words
-	 * in the input file.
+	 * Generates a report of the most frequently appearing words in the input file.
 	 * 
 	 * @param pathToInputFile the path to the input file to process
-	 * @param numberOfWords the number of words to include in the report
+	 * @param numberOfWords   the number of words to include in the report
 	 * @return a report of the most frequently appearing words in the input file
 	 * @throws FileNotFoundException
 	 */
 	public String getMostFrequentWords(String pathToInputFile, int numberOfWords) throws FileNotFoundException {
 		Scanner s = new Scanner(new File(pathToInputFile));
 		List<String> words = new ArrayBasedList<String>();
-		
+
 		while (s.hasNextLine()) {
 			for (String str : processLine(s.nextLine())) {
 				words.addLast(str);
 			}
 		}
 		s.close();
-		
+
 		List<String> sortedWords = getMostFrequentWords(words, numberOfWords);
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("Most Frequent Words Report [\n");
 		for (int i = 0; i < numberOfWords; i++) {
 			sb.append(String.format("%3" + sortedWords.get(i) + "\n"));
 		}
 		sb.append("]\n");
-		
+
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Returns a list of words that appear most frequently in the input list
 	 * 
-	 * @param inputList the list of words to process
-	 * @param numberOfWords the number of words to include in the output list of most frequent words
+	 * @param inputList     the list of words to process
+	 * @param numberOfWords the number of words to include in the output list of
+	 *                      most frequent words
 	 * @return a list of words that appear most frequently in the input list
 	 */
 	public List<String> getMostFrequentWords(List<String> inputList, int numberOfWords) {
 		SkipListMap<String, Integer> frequencies = new SkipListMap<String, Integer>();
-		
+
 		for (int i = 0; i < inputList.size(); i++) {
 			if (frequencies.get(inputList.get(i)) != null) {
 				// Increase frequency of word
@@ -149,29 +200,29 @@ public class CompressionManager {
 				frequencies.put(inputList.get(i), 1);
 			}
 		}
-			
-		// Custom comparator that will sort by values (descending), then by keys 
+
+		// Custom comparator that will sort by values (descending), then by keys
 		// alphabetically in the case of identical frequencies
-		Comparator c = new FreqComparator();	// hmmm
-		
+		Comparator c = new FreqComparator(); // hmmm
+
 		ArrayBasedList<Entry<String, Integer>> sortedFreq = new ArrayBasedList<Entry<String, Integer>>();
 		for (Entry<String, Integer> e : frequencies.entrySet()) {
 			sortedFreq.addLast(e);
 		}
-		
-		sortedFreq.sort(c);	//hmm...
-		
+
+		sortedFreq.sort(c); // hmm...
+
 		ArrayBasedList<String> sortedWords = new ArrayBasedList<String>();
 		for (int i = 0; i < numberOfWords; i++) {
 			// Adds words to list with frequencies highest to lowest
 			sortedWords.addLast(sortedFreq.get(i).getKey());
 		}
-		
+
 		return sortedWords;
 	}
 
-	//TODO: complete any other private helper methods as needed
-	
+	// TODO: complete any other private helper methods as needed
+
 	/**
 	 * Processes given line of file
 	 * 
@@ -182,7 +233,7 @@ public class CompressionManager {
 		Scanner s = new Scanner(line);
 		s.useDelimiter(" ");
 		List<String> words = new ArrayBasedList<String>();
-		
+
 		while (s.hasNext()) {
 			String currentWord = s.next();
 			String bareWord = currentWord.replaceAll("[^a-zA-Z'-]", "");
