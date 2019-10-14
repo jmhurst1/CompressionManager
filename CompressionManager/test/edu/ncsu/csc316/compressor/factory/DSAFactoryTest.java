@@ -9,12 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests DSAFactory
  * @author Jason
  *
  */
 public class DSAFactoryTest {
 
 	/**
+	 * Sets up for the tests
 	 * @throws java.lang.Exception
 	 */
 	@Before

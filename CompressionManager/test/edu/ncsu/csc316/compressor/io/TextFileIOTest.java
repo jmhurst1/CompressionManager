@@ -9,12 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests TextFileIO
  * @author Jason
  *
  */
 public class TextFileIOTest {
 
 	/**
+	 * Sets up for the tests
 	 * @throws java.lang.Exception
 	 */
 	@Before

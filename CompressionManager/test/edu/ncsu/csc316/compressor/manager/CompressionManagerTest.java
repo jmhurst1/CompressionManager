@@ -9,12 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests CompressionManager
  * @author Jason
  *
  */
 public class CompressionManagerTest {
 
 	/**
+	 * Sets up for the tests
 	 * @throws java.lang.Exception
 	 */
 	@Before
