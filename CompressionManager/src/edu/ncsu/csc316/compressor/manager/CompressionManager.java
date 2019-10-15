@@ -2,6 +2,7 @@ package edu.ncsu.csc316.compressor.manager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Scanner;
 
@@ -49,11 +50,25 @@ public class CompressionManager {
 	 * @param pathToInputFile the path to the input file to be processed
 	 * @param outputDirectory the directory where the processed file should be saved
 	 * @return a list of strings that represent the lines of processed output
-	 * @throws FileNotFoundException
+	 * @throws IOException 
 	 */
-	public List<String> processFile(String pathToInputFile, String outputDirectory) throws FileNotFoundException {
+	public List<String> processFile(String pathToInputFile, String outputDirectory) throws IOException {
 		// TODO: complete this method
 		// Consider calling the getCompressed or getDecompressed helper methods
+		List<String> fileLines = TextFileIO.readFileByLine(pathToInputFile);
+		String ending;
+		if(fileLines.get(0).equals("0")) { //Decompress
+			fileLines = getDecompressed(fileLines);
+			ending = ".txt";
+		} else { //Compress
+			fileLines = getCompressed(fileLines);
+			ending = ".316";
+		}
+		String fileName = pathToInputFile.substring(pathToInputFile.lastIndexOf('/'),
+				pathToInputFile.lastIndexOf('.'));
+		
+		TextFileIO.writeFile(fileLines, outputDirectory + fileName + ending);
+		return fileLines;
 	}
 
 	/**
@@ -75,6 +90,7 @@ public class CompressionManager {
 		Map<String, Integer> wordMap = DSAFactory.getOrderedMap();
 		List<String> compressed = DSAFactory.getIndexedList();
 		int wordCount = 1;
+		compressed.addLast("0");
 
 		for (int i = 0; i < fileLines.size(); i++) {
 			Scanner wordScanner = new Scanner(fileLines.get(i));

@@ -13,6 +13,9 @@ import java.util.Scanner;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.ncsu.csc316.compressor.factory.DSAFactory;
+import edu.ncsu.csc316.dsa.list.List;
+
 /**
  * Tests CompressionManager
  * @author Jason
@@ -41,23 +44,23 @@ public class CompressionManagerTest {
 		try {
 			tester.processFile(validUncompressed1, "output");
 			checkFiles("output/fleaFlyExpected.316", "output/fleaFly.316");
-		} catch(FileNotFoundException e) {
+		} catch(IOException e) {
 			fail();
 		}
 		
 		try {
 			tester.processFile(validCompressed1, "output");
 			checkFiles("output/fleaFlyExpected.txt", "output/fleaFly.txt");
-		} catch(FileNotFoundException e) {
+		} catch(IOException e) {
 			fail();
 		}
 		
 		try {
 			tester.processFile("imaginaryfile/input.txt", "output");
 			fail();
-		} catch(FileNotFoundException e) {}
+		} catch(IOException e) {}
 		
-		fail("Not yet implemented");
+		//TODO Add more tests
 	}
 
 	/**
@@ -65,7 +68,29 @@ public class CompressionManagerTest {
 	 */
 	@Test
 	public void testGetCompressed() {
-		fail("Not yet implemented");
+		List<String> uncompressedLines = DSAFactory.getIndexedList();
+		uncompressedLines.add(0, "A flea and a fly in a flue");
+		uncompressedLines.add(1, "Were imprisoned, so what could they do?");
+		uncompressedLines.add(2, "Said the fly, \"let us flee!\"");
+		uncompressedLines.add(3, "\"Let us fly!\" said the flea.");
+		uncompressedLines.add(4, "So they flew through a flaw in the flue. ");
+		uncompressedLines.add(5, "   - Ogden Nash");
+		
+		List<String> outputLines = tester.getCompressed(uncompressedLines);
+		List<String> expectedLines = DSAFactory.getIndexedList();
+		
+		expectedLines.add(0, "0");
+		expectedLines.add(1, "A flea and a fly in 4 flue");
+		expectedLines.add(2, "Were imprisoned, so what could they do?");
+		expectedLines.add(3, "Said the 5, \"let us flee!\"");
+		expectedLines.add(4, "\"Let 18 5!\" said 16 2.");
+		expectedLines.add(5, "So 13 flew through 4 flaw 6 16 7. ");
+		expectedLines.add(6, "   - Ogden Nash");
+		
+		for(int i = 0; i < expectedLines.size(); i++) {
+			assertEquals("Line " + i + " does not equal", expectedLines.get(i), outputLines.get(i));
+		}
+		assertEquals(expectedLines.size(), outputLines.size());
 	}
 
 	/**
