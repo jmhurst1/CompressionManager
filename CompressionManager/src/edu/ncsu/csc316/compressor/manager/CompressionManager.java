@@ -5,11 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.Scanner;
 
+import edu.ncsu.csc316.compressor.factory.DSAFactory;
+import edu.ncsu.csc316.compressor.io.TextFileIO;
 import edu.ncsu.csc316.dsa.list.ArrayBasedList;
 import edu.ncsu.csc316.dsa.list.List;
 import edu.ncsu.csc316.dsa.map.Map;
 import edu.ncsu.csc316.dsa.map.Map.Entry;
 import edu.ncsu.csc316.dsa.map.SkipListMap;
+import edu.ncsu.csc316.dsa.sorter.Sorter;
 
 /**
  * The CompressionManager class handles behaviors associated with compressing an
@@ -69,8 +72,8 @@ public class CompressionManager {
 	 * @return a list of strings that represent the compressed output
 	 */
 	public List<String> getCompressed(List<String> fileLines) {
-		SkipListMap<String, Integer> wordMap = new SkipListMap<String, Integer>();
-		ArrayBasedList<String> compressed = new ArrayBasedList<String>();
+		Map<String, Integer> wordMap = DSAFactory.getOrderedMap();
+		List<String> compressed = DSAFactory.getIndexedList();
 		int wordCount = 1;
 
 		for (int i = 0; i < fileLines.size(); i++) {
@@ -81,7 +84,7 @@ public class CompressionManager {
 			while (wordScanner.hasNext()) {
 				String current = wordScanner.next();
 				// Strips the word of punctuation
-				String bareWord = current.replaceAll("[^a-zA-Z'-]", "");
+				String bareWord = current.replaceAll("[^a-zA-Z]", "");
 
 				// Only inserted on first time word is encountered
 				if (wordMap.get(bareWord) == null) {
@@ -118,19 +121,19 @@ public class CompressionManager {
 	 * @return a list of strings that represent the compressed output
 	 */
 	public List<String> getDecompressed(List<String> fileLines) {
-		SkipListMap<Integer, String> wordMap = new SkipListMap<Integer, String>();
-		ArrayBasedList<String> uncompressed = new ArrayBasedList<String>();
+		Map<Integer, String> wordMap = DSAFactory.getOrderedMap();
+		List<String> uncompressed = DSAFactory.getIndexedList();
 		int wordCount = 1;
-		
+
 		for (int i = 0; i < fileLines.size(); i++) {
 			Scanner wordScanner = new Scanner(fileLines.get(i));
 			wordScanner.useDelimiter(" ");
-			
+
 			// Gets a word from line of text
 			while (wordScanner.hasNext()) {
 				String currentWord = wordScanner.next();
 				// Strips the word or number of punctuation
-				String bareWord = currentWord.replaceAll("[^a-zA-Z0-9'-]", "");
+				String bareWord = currentWord.replaceAll("[^a-zA-Z0-9]", "");
 				// If bare word is not a number, add it to wordMap
 				try {
 					Integer.parseInt(bareWord);
@@ -159,10 +162,10 @@ public class CompressionManager {
 	 */
 	public String getMostFrequentWords(String pathToInputFile, int numberOfWords) throws FileNotFoundException {
 		Scanner s = new Scanner(new File(pathToInputFile));
-		List<String> words = new ArrayBasedList<String>();
+		List<String> words = DSAFactory.getIndexedList();
 
 		while (s.hasNextLine()) {
-			for (String str : processLine(s.nextLine())) {
+			for (String str : TextFileIO.processLine(s.nextLine())) {
 				words.addLast(str);
 			}
 		}
@@ -189,15 +192,15 @@ public class CompressionManager {
 	 * @return a list of words that appear most frequently in the input list
 	 */
 	public List<String> getMostFrequentWords(List<String> inputList, int numberOfWords) {
-		SkipListMap<String, Integer> frequencies = new SkipListMap<String, Integer>();
+		Map<String, Integer> frequencies = DSAFactory.getOrderedMap();
 
 		for (int i = 0; i < inputList.size(); i++) {
-			if (frequencies.get(inputList.get(i)) != null) {
+			if (frequencies.get(inputList.get(i).toLowerCase()) != null) {
 				// Increase frequency of word
-				frequencies.put(inputList.get(i), frequencies.get(inputList.get(i) + 1));
+				frequencies.put(inputList.get(i).toLowerCase(), frequencies.get(inputList.get(i).toLowerCase() + 1));
 			} else {
 				// First instance of word, add to map
-				frequencies.put(inputList.get(i), 1);
+				frequencies.put(inputList.get(i).toLowerCase(), 1);
 			}
 		}
 
@@ -205,42 +208,21 @@ public class CompressionManager {
 		// alphabetically in the case of identical frequencies
 		Comparator c = new FreqComparator(); // hmmm
 
-		ArrayBasedList<Entry<String, Integer>> sortedFreq = new ArrayBasedList<Entry<String, Integer>>();
+		List<Entry<String, Integer>> sortedFreq = DSAFactory.getIndexedList();
 		for (Entry<String, Integer> e : frequencies.entrySet()) {
 			sortedFreq.addLast(e);
 		}
 
-		sortedFreq.sort(c); // hmm...
+		Sorter s = DSAFactory.getComparisonSorter();
+		// sort them somehow??
 
-		ArrayBasedList<String> sortedWords = new ArrayBasedList<String>();
+		List<String> sortedWords = DSAFactory.getIndexedList();
 		for (int i = 0; i < numberOfWords; i++) {
 			// Adds words to list with frequencies highest to lowest
 			sortedWords.addLast(sortedFreq.get(i).getKey());
 		}
 
 		return sortedWords;
-	}
-
-	// TODO: complete any other private helper methods as needed
-
-	/**
-	 * Processes given line of file
-	 * 
-	 * @param line line to process
-	 * @return list of all words, stripped of punctuation, in given line
-	 */
-	private List<String> processLine(String line) {
-		Scanner s = new Scanner(line);
-		s.useDelimiter(" ");
-		List<String> words = new ArrayBasedList<String>();
-
-		while (s.hasNext()) {
-			String currentWord = s.next();
-			String bareWord = currentWord.replaceAll("[^a-zA-Z'-]", "");
-			words.addLast(bareWord);
-		}
-		s.close();
-		return words;
 	}
 
 }

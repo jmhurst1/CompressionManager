@@ -61,7 +61,7 @@ public class DSAFactory {
 	 * @return an index-based list
 	 */
 	public static <E> List<E> getIndexedList() {
-		return getSinglyLinkedList();
+		return getArrayBasedList();
 	}
 
 	/**
