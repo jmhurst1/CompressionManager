@@ -5,6 +5,11 @@ package edu.ncsu.csc316.compressor.manager;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,6 +19,10 @@ import org.junit.Test;
  *
  */
 public class CompressionManagerTest {
+	
+	public String validUncompressed1 = "input/fleaFly.txt";
+	public String validCompressed1 = "input/fleaFly.316";
+	public CompressionManager tester;
 
 	/**
 	 * Sets up for the tests
@@ -21,14 +30,7 @@ public class CompressionManagerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-	}
-
-	/**
-	 * Test method for {@link edu.ncsu.csc316.compressor.manager.CompressionManager#CompressionManager()}.
-	 */
-	@Test
-	public void testCompressionManager() {
-		fail("Not yet implemented");
+		tester = new CompressionManager();
 	}
 
 	/**
@@ -36,6 +38,25 @@ public class CompressionManagerTest {
 	 */
 	@Test
 	public void testProcessFile() {
+		try {
+			tester.processFile(validUncompressed1, "output");
+			checkFiles("output/fleaFlyExpected.316", "output/fleaFly.316");
+		} catch(FileNotFoundException e) {
+			fail();
+		}
+		
+		try {
+			tester.processFile(validCompressed1, "output");
+			checkFiles("output/fleaFlyExpected.txt", "output/fleaFly.txt");
+		} catch(FileNotFoundException e) {
+			fail();
+		}
+		
+		try {
+			tester.processFile("imaginaryfile/input.txt", "output");
+			fail();
+		} catch(FileNotFoundException e) {}
+		
 		fail("Not yet implemented");
 	}
 
@@ -70,5 +91,27 @@ public class CompressionManagerTest {
 	public void testGetMostFrequentWordsListOfStringInt() {
 		fail("Not yet implemented");
 	}
+	
+	/**
+     * Helper method to compare two files for the same contents
+     *
+     * @param expFile expected output
+     * @param actFile actual output
+     */
+    private void checkFiles(String expFile, String actFile) {
+        try {
+            Scanner expScanner = new Scanner(new File(expFile));
+            Scanner actScanner = new Scanner(new File(actFile));
+
+            while (expScanner.hasNextLine()) {
+                assertEquals(expScanner.nextLine(), actScanner.nextLine());
+            }
+
+            expScanner.close();
+            actScanner.close();
+        } catch (IOException e) {
+            fail("Error reading files.");
+        }
+    }
 
 }
