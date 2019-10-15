@@ -78,7 +78,7 @@ public class CompressionManager {
 
 		for (int i = 0; i < fileLines.size(); i++) {
 			Scanner wordScanner = new Scanner(fileLines.get(i));
-			wordScanner.useDelimiter(" ");
+			wordScanner.useDelimiter("[ |'|-|]");
 
 			// Gets a word from line of text
 			while (wordScanner.hasNext()) {
@@ -127,7 +127,7 @@ public class CompressionManager {
 
 		for (int i = 0; i < fileLines.size(); i++) {
 			Scanner wordScanner = new Scanner(fileLines.get(i));
-			wordScanner.useDelimiter(" ");
+			wordScanner.useDelimiter("[ |'|-|]");
 
 			// Gets a word from line of text
 			while (wordScanner.hasNext()) {
