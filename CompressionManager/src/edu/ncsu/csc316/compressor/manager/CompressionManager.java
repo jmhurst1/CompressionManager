@@ -50,23 +50,22 @@ public class CompressionManager {
 	 * @param pathToInputFile the path to the input file to be processed
 	 * @param outputDirectory the directory where the processed file should be saved
 	 * @return a list of strings that represent the lines of processed output
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public List<String> processFile(String pathToInputFile, String outputDirectory) throws IOException {
 		// TODO: complete this method
 		// Consider calling the getCompressed or getDecompressed helper methods
 		List<String> fileLines = TextFileIO.readFileByLine(pathToInputFile);
 		String ending;
-		if(fileLines.get(0).equals("0")) { //Decompress
+		if (fileLines.get(0).equals("0")) { // Decompress
 			fileLines = getDecompressed(fileLines);
 			ending = ".txt";
-		} else { //Compress
+		} else { // Compress
 			fileLines = getCompressed(fileLines);
 			ending = ".316";
 		}
-		String fileName = pathToInputFile.substring(pathToInputFile.lastIndexOf('/'),
-				pathToInputFile.lastIndexOf('.'));
-		
+		String fileName = pathToInputFile.substring(pathToInputFile.lastIndexOf('/'), pathToInputFile.lastIndexOf('.'));
+
 		TextFileIO.writeFile(fileLines, outputDirectory + fileName + ending);
 		return fileLines;
 	}
@@ -93,7 +92,15 @@ public class CompressionManager {
 		compressed.addLast("0");
 
 		for (int i = 0; i < fileLines.size(); i++) {
-			Scanner wordScanner = new Scanner(fileLines.get(i));
+
+			// Replaces all known words in file line with their keys
+			String temp = fileLines.get(i);
+			for (Entry<String, Integer> e : wordMap.entrySet()) {
+				// Replaces all instances of a word with its key
+				temp = temp.replaceAll("\\b" + e.getKey() + "\\b", Integer.toString(e.getValue()));
+			}
+
+			Scanner wordScanner = new Scanner(temp);
 			wordScanner.useDelimiter("[ |'|-|]");
 
 			// Gets a word from line of text
@@ -102,19 +109,20 @@ public class CompressionManager {
 				// Strips the word of punctuation
 				String bareWord = current.replaceAll("[^a-zA-Z]", "");
 
-				// Only inserted on first time word is encountered
-				if (wordMap.get(bareWord) == null) {
-					wordMap.put(bareWord, wordCount);
-					wordCount++;
+				if (!bareWord.equals("")) {
+					// Only inserted on first time word is encountered
+					if (wordMap.get(bareWord) == null) {
+						wordMap.put(bareWord, wordCount);
+						wordCount++;
+					} else {
+						// Otherwise replace all instances after first of the word with its key
+						temp = temp.replaceAll("\\b" + bareWord + "\\b", Integer.toString(wordMap.get(bareWord)));
+						temp = temp.replaceFirst(Integer.toString(wordMap.get(bareWord)), bareWord);
+					}
 				}
 			}
-			for (Entry<String, Integer> e : wordMap.entrySet()) {
-				// Replaces all instances of a word with its key
-				String temp = fileLines.get(i).replaceAll(e.getKey(), Integer.toString(e.getValue()));
-				// Replaces the first instance of each key with its word
-				temp = temp.replaceFirst(Integer.toString(e.getValue()), e.getKey());
-				compressed.addLast(temp);
-			}
+
+			compressed.addLast(temp);
 			wordScanner.close();
 		}
 		return compressed;

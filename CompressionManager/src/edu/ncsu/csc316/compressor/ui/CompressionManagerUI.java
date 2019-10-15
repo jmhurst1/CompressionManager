@@ -76,7 +76,7 @@ public class CompressionManagerUI {
 					for (String str : manager.processFile(filename, dir)) {
 						System.out.println(str);
 					}
-				} catch (FileNotFoundException e) {
+				} catch (Exception e) {
 					// Since filename was checked earlier, an exception should never be found.
 				}
 			} else if (op.equalsIgnoreCase("d")) {
@@ -87,7 +87,7 @@ public class CompressionManagerUI {
 					for (String str : manager.processFile(filename, dir)) {
 						System.out.println(str);
 					}
-				} catch (FileNotFoundException e) {
+				} catch (Exception e) {
 					// Since filename was checked earlier, an exception should never be found.
 				}
 			} else if (op.equalsIgnoreCase("f")) {
