@@ -18,8 +18,9 @@ import edu.ncsu.csc316.compressor.manager.CompressionManager;
 public class CompressionManagerUI {
 
 	/**
-	 * Runs the UI and allows the user to be able to select a file
-	 * to compress, decompress, or get the most frequent words
+	 * Runs the UI and allows the user to be able to select a file to compress,
+	 * decompress, or get the most frequent words
+	 * 
 	 * @param args The arguments provided to the main function
 	 */
 	public static void main(String[] args) {
@@ -31,9 +32,9 @@ public class CompressionManagerUI {
 		System.out.println(
 				"Begin by specifying which file you would like to compress, \ndecompress, or get the most frequent words of.\n");
 		System.out.println(
-				"The accepted file type for compression are .txt files. \nCompressed files will be exported as .316 files.\n");
+				"The accepted file types for compression are .txt files. \nCompressed files will be exported as .316 files.\n");
 		System.out.println(
-				"The accepted file type for decompression are .316 files. \nDecompressed files will be exported as .txt files.\n");
+				"The accepted file types for decompression are .316 files. \nDecompressed files will be exported as .txt files.\n");
 		System.out.println("Enter Q to quit.\n");
 		System.out.println("*************************");
 
@@ -55,8 +56,7 @@ public class CompressionManagerUI {
 
 		System.out.println("*************************");
 		System.out.println("Please choose an operation:");
-		System.out.println("c - Compress");
-		System.out.println("d - Decompress");
+		System.out.println("c - Compress/Decompress");
 		System.out.println("f - Most Frequent Words");
 		System.out.println("q - Quit\n");
 		System.out.println("*************************");
@@ -75,20 +75,7 @@ public class CompressionManagerUI {
 				System.out.print("Enter desired output directory: ");
 				String dir = sc.next();
 				try {
-					for (String str : manager.processFile(filename, dir)) {
-						System.out.println(str);
-					}
-				} catch (Exception e) {
-					// Since filename was checked earlier, an exception should never be found.
-				}
-			} else if (op.equalsIgnoreCase("d")) {
-				System.out.println("*************************");
-				System.out.print("Enter desired output directory: ");
-				String dir = sc.next();
-				try {
-					for (String str : manager.processFile(filename, dir)) {
-						System.out.println(str);
-					}
+					manager.processFile(filename, dir);
 				} catch (Exception e) {
 					// Since filename was checked earlier, an exception should never be found.
 				}
@@ -112,7 +99,7 @@ public class CompressionManagerUI {
 				op = "";
 			}
 		}
-		System.out.println("Operation successfully performed.\n");
+		System.out.println("\nOperation successfully performed.");
 		System.out.println("*************************");
 		sc.close();
 	}
