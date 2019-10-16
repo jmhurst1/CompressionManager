@@ -62,7 +62,7 @@ public class TextFileIO {
 
 	public static List<String> processLine(String line) {
 		Scanner s = new Scanner(line);
-		s.useDelimiter(" ");
+		s.useDelimiter("[ |'|-|]");
 		List<String> words = DSAFactory.getIndexedList();
 
 		while (s.hasNext()) {

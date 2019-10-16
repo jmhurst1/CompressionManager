@@ -150,7 +150,7 @@ public class CompressionManagerTest {
 		
 		try {
 			String actReport = tester.getMostFrequentWords(validUncompressed2, 5);
-			assertEquals("Most Frequent Words Report [\n   i\n   de\n   dr\n   going\n   re\n]", 
+			assertEquals("Most Frequent Words Report [\n   i\n   always\n   de\n   dr\n   going\n]", 
 					actReport);
 			
 		} catch (FileNotFoundException e) {
