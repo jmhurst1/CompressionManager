@@ -197,7 +197,7 @@ public class CompressionManager {
 		List<String> words = DSAFactory.getIndexedList();
 
 		while (s.hasNextLine()) {
-			for (String str : TextFileIO.processLine(s.nextLine())) {
+			for (String str : processLine(s.nextLine())) {
 				words.addLast(str);
 			}
 		}
@@ -265,6 +265,20 @@ public class CompressionManager {
 			}
 		}
 		return sortedWords;
+	}
+	
+	private static List<String> processLine(String line) {
+		Scanner s = new Scanner(line);
+		s.useDelimiter("[ |'|-|]");
+		List<String> words = DSAFactory.getIndexedList();
+
+		while (s.hasNext()) {
+			String currentWord = s.next();
+			String bareWord = currentWord.replaceAll("[^a-zA-Z]", "");
+			words.addLast(bareWord);
+		}
+		s.close();
+		return words;
 	}
 
 }
