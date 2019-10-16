@@ -140,7 +140,13 @@ public class CompressionManagerTest {
 	 */
 	@Test
 	public void testGetMostFrequentWordsStringInt() {
-		fail("Not yet implemented");
+		try {
+			String actReport = tester.getMostFrequentWords(validUncompressed1, 5);
+			assertEquals("Most Frequent Words Report [\n   a\n   fly\n   the\n   flea\n   flue\n]", 
+					actReport);
+		} catch (FileNotFoundException e) {
+			fail();
+		}
 	}
 
 	/**
