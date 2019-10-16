@@ -56,7 +56,7 @@ public class CompressionManager {
 		String fileName = pathToInputFile.substring(pathToInputFile.lastIndexOf('/'), pathToInputFile.lastIndexOf('.'));
 
 		try {
-		TextFileIO.writeFile(fileLines, outputDirectory + fileName + ending);
+			TextFileIO.writeFile(fileLines, outputDirectory + fileName + ending);
 		} catch (IOException e) {
 			throw new FileNotFoundException();
 		}
@@ -256,7 +256,8 @@ public class CompressionManager {
 		}
 		return sortedWords;
 	}
-	
+
+	// Returns a list of every word in a given line of text
 	private static List<String> processLine(String line) {
 		Scanner s = new Scanner(line);
 		s.useDelimiter("[ |'|-|]");

@@ -40,7 +40,7 @@ public class CompressionManagerTest {
 
 	/**
 	 * Sets up for the tests
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception on setup
 	 */
 	@Before
 	public void setUp() throws Exception {
