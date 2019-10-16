@@ -51,9 +51,9 @@ public class CompressionManager {
 	 * @param pathToInputFile the path to the input file to be processed
 	 * @param outputDirectory the directory where the processed file should be saved
 	 * @return a list of strings that represent the lines of processed output
-	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
-	public List<String> processFile(String pathToInputFile, String outputDirectory) throws IOException {
+	public List<String> processFile(String pathToInputFile, String outputDirectory) throws FileNotFoundException {
 		List<String> fileLines = TextFileIO.readFileByLine(pathToInputFile);
 		String ending;
 		if (fileLines.get(0).equals("0")) { // Decompress
@@ -65,7 +65,11 @@ public class CompressionManager {
 		}
 		String fileName = pathToInputFile.substring(pathToInputFile.lastIndexOf('/'), pathToInputFile.lastIndexOf('.'));
 
+		try {
 		TextFileIO.writeFile(fileLines, outputDirectory + fileName + ending);
+		} catch (IOException e) {
+			throw new FileNotFoundException();
+		}
 		return fileLines;
 	}
 
