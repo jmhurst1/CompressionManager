@@ -148,7 +148,36 @@ public class CompressionManagerTest {
 	 */
 	@Test
 	public void testGetMostFrequentWordsListOfStringInt() {
-		fail("Not yet implemented");
+		List<String> words = DSAFactory.getIndexedList();
+		words.addLast("a");
+		words.addLast("b");
+		words.addLast("c");
+		words.addLast("d");
+		words.addLast("A");
+		words.addLast("b");
+		words.addLast("c");
+		words.addLast("D");
+		words.addLast("e");
+		words.addLast("a");
+		words.addLast("b");
+		words.addLast("c");
+		words.addLast("A");
+		words.addLast("B");
+		words.addLast("a");
+		words.addLast("b");
+		words.addLast("f");
+		List<String> freqWords = tester.getMostFrequentWords(words, 5);
+		assertEquals(freqWords.get(0), "a"); //5 times
+		assertEquals(freqWords.get(1), "b"); //5 times
+		assertEquals(freqWords.get(2), "c"); //3 times
+		assertEquals(freqWords.get(3), "d"); //2 times
+		assertEquals(freqWords.get(4), "e"); //1 time
+		try {
+			assertEquals(freqWords.get(5), "f"); //1 time
+			fail();
+		} catch(IndexOutOfBoundsException e) {
+			assertEquals(freqWords.size(), 5);
+		}
 	}
 	
 	/**
