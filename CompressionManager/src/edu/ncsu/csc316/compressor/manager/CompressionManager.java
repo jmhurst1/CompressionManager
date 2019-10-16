@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import edu.ncsu.csc316.compressor.factory.DSAFactory;
@@ -31,7 +32,7 @@ public class CompressionManager {
 	 * Initializes CompressionMananger
 	 */
 	public CompressionManager() {
-		// TODO: complete this constructor as needed
+
 	}
 
 	/**
@@ -53,8 +54,6 @@ public class CompressionManager {
 	 * @throws IOException
 	 */
 	public List<String> processFile(String pathToInputFile, String outputDirectory) throws IOException {
-		// TODO: complete this method
-		// Consider calling the getCompressed or getDecompressed helper methods
 		List<String> fileLines = TextFileIO.readFileByLine(pathToInputFile);
 		String ending;
 		if (fileLines.get(0).equals("0")) { // Decompress
@@ -205,9 +204,11 @@ public class CompressionManager {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Most Frequent Words Report [\n");
 		for (int i = 0; i < numberOfWords; i++) {
-			sb.append(String.format("%3" + sortedWords.get(i) + "\n"));
+			sb.append("   ");
+			sb.append(sortedWords.get(i));
+			sb.append("\n");
 		}
-		sb.append("]\n");
+		sb.append("]");
 
 		return sb.toString();
 	}
@@ -223,34 +224,42 @@ public class CompressionManager {
 	public List<String> getMostFrequentWords(List<String> inputList, int numberOfWords) {
 		Map<String, Integer> frequencies = DSAFactory.getOrderedMap();
 
+		// Finds frequencies of all words in input list
 		for (int i = 0; i < inputList.size(); i++) {
-			if (frequencies.get(inputList.get(i).toLowerCase()) != null) {
-				// Increase frequency of word
-				frequencies.put(inputList.get(i).toLowerCase(), frequencies.get(inputList.get(i).toLowerCase() + 1));
-			} else {
-				// First instance of word, add to map
-				frequencies.put(inputList.get(i).toLowerCase(), 1);
+			if (!inputList.get(i).equals("")) {
+				if (frequencies.get(inputList.get(i).toLowerCase()) != null) {
+					// Increase frequency of word
+					frequencies.put(inputList.get(i).toLowerCase(),
+							frequencies.get(inputList.get(i).toLowerCase()) + 1);
+				} else {
+					// First instance of word, add to map
+					frequencies.put(inputList.get(i).toLowerCase(), 1);
+				}
 			}
 		}
 
-		// Custom comparator that will sort by values (descending), then by keys
-		// alphabetically in the case of identical frequencies
-		Comparator c = new FreqComparator(); // hmmm
-
-		List<Entry<String, Integer>> sortedFreq = DSAFactory.getIndexedList();
-		for (Entry<String, Integer> e : frequencies.entrySet()) {
-			sortedFreq.addLast(e);
+		// Sort integer frequencies using merge sort (lowest to highest)
+		Integer[] freqsForSorting = new Integer[frequencies.size()];
+		Iterator<Integer> it = frequencies.values().iterator();
+		int i = 0;
+		while (it.hasNext()) {
+			freqsForSorting[i] = it.next();
+			i++;
 		}
+		Sorter<Integer> s = DSAFactory.getComparisonSorter();
+		s.sort(freqsForSorting);
 
-		Sorter s = DSAFactory.getComparisonSorter();
-		// sort them somehow??
-
+		// Matches sorted frequencies to matching keys in alphabetical order
 		List<String> sortedWords = DSAFactory.getIndexedList();
-		for (int i = 0; i < numberOfWords; i++) {
-			// Adds words to list with frequencies highest to lowest
-			sortedWords.addLast(sortedFreq.get(i).getKey());
+		for (int j = freqsForSorting.length - 1; j >= Math.max(freqsForSorting.length - numberOfWords, 0); j--) {
+			for (Entry<String, Integer> e : frequencies.entrySet()) {
+				if (e.getValue() == freqsForSorting[j]) {
+					sortedWords.addLast(e.getKey());
+					frequencies.remove(e.getKey());
+					break;
+				}
+			}
 		}
-
 		return sortedWords;
 	}
 
