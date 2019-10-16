@@ -3,17 +3,14 @@ package edu.ncsu.csc316.compressor.manager;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Scanner;
 
 import edu.ncsu.csc316.compressor.factory.DSAFactory;
 import edu.ncsu.csc316.compressor.io.TextFileIO;
-import edu.ncsu.csc316.dsa.list.ArrayBasedList;
 import edu.ncsu.csc316.dsa.list.List;
 import edu.ncsu.csc316.dsa.map.Map;
 import edu.ncsu.csc316.dsa.map.Map.Entry;
-import edu.ncsu.csc316.dsa.map.SkipListMap;
 import edu.ncsu.csc316.dsa.sorter.Sorter;
 
 /**
@@ -257,7 +254,7 @@ public class CompressionManager {
 		List<String> sortedWords = DSAFactory.getIndexedList();
 		for (int j = freqsForSorting.length - 1; j >= Math.max(freqsForSorting.length - numberOfWords, 0); j--) {
 			for (Entry<String, Integer> e : frequencies.entrySet()) {
-				if (e.getValue() == freqsForSorting[j]) {
+				if (e.getValue().equals(freqsForSorting[j])) {
 					sortedWords.addLast(e.getKey());
 					frequencies.remove(e.getKey());
 					break;

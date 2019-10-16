@@ -18,7 +18,9 @@ import edu.ncsu.csc316.compressor.manager.CompressionManager;
 public class CompressionManagerUI {
 
 	/**
-	 * @param args
+	 * Runs the UI and allows the user to be able to select a file
+	 * to compress, decompress, or get the most frequent words
+	 * @param args The arguments provided to the main function
 	 */
 	public static void main(String[] args) {
 		CompressionManager manager = new CompressionManager();
@@ -36,7 +38,7 @@ public class CompressionManagerUI {
 		System.out.println("*************************");
 
 		String filename = "";
-		while (filename == "") {
+		while (filename.equals("")) {
 			System.out.print("Enter file name: ");
 			filename = sc.next();
 
@@ -60,7 +62,7 @@ public class CompressionManagerUI {
 		System.out.println("*************************");
 
 		String op = "";
-		while (op == "") {
+		while (op.equals("")) {
 			System.out.print("Enter desired operation: ");
 			op = sc.next();
 
