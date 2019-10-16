@@ -26,13 +26,6 @@ import edu.ncsu.csc316.dsa.sorter.Sorter;
 public class CompressionManager {
 
 	/**
-	 * Initializes CompressionMananger
-	 */
-	public CompressionManager() {
-
-	}
-
-	/**
 	 * Determines whether to compress or decompress the specified input file;
 	 * creates the output file in the specified output directory; then returns a
 	 * list of strings that represent each line of the processed output.

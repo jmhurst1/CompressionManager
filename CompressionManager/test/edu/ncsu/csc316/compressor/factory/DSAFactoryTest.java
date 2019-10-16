@@ -5,7 +5,6 @@ package edu.ncsu.csc316.compressor.factory;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import edu.ncsu.csc316.dsa.data.Student;
@@ -30,15 +29,6 @@ import edu.ncsu.csc316.dsa.stack.Stack;
  *
  */
 public class DSAFactoryTest {
-
-	/**
-	 * Sets up for the tests
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		
-	}
 
 	/**
 	 * Test method for {@link edu.ncsu.csc316.compressor.factory.DSAFactory#getUnorderedMap()}.
