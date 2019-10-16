@@ -41,7 +41,7 @@ public class CompressionManager {
 	 * @param pathToInputFile the path to the input file to be processed
 	 * @param outputDirectory the directory where the processed file should be saved
 	 * @return a list of strings that represent the lines of processed output
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException if the file cannot be read or written to
 	 */
 	public List<String> processFile(String pathToInputFile, String outputDirectory) throws FileNotFoundException {
 		List<String> fileLines = TextFileIO.readFileByLine(pathToInputFile);
@@ -180,7 +180,7 @@ public class CompressionManager {
 	 * @param pathToInputFile the path to the input file to process
 	 * @param numberOfWords   the number of words to include in the report
 	 * @return a report of the most frequently appearing words in the input file
-	 * @throws FileNotFoundException
+	 * @throws FileNotFoundException if the file cannot be read
 	 */
 	public String getMostFrequentWords(String pathToInputFile, int numberOfWords) throws FileNotFoundException {
 		Scanner s = new Scanner(new File(pathToInputFile));
