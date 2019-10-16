@@ -145,6 +145,8 @@ public class CompressionManager {
 	 * @return a list of strings that represent the compressed output
 	 */
 	public List<String> getDecompressed(List<String> fileLines) {
+		fileLines.remove(0); // Remove 0 from compressed file
+
 		Map<Integer, String> wordMap = DSAFactory.getOrderedMap();
 		List<String> uncompressed = DSAFactory.getIndexedList();
 		int wordCount = 1;
@@ -162,15 +164,18 @@ public class CompressionManager {
 				try {
 					Integer.parseInt(bareWord);
 				} catch (Exception e) {
-					wordMap.put(wordCount, bareWord);
-					wordCount++;
+					if (!bareWord.equals("")) {
+						wordMap.put(wordCount, bareWord);
+						wordCount++;
+					}
 				}
 			}
+			String temp = fileLines.get(i);
 			for (Entry<Integer, String> e : wordMap.entrySet()) {
 				// Replaces all instances of a number with its word
-				String temp = fileLines.get(i).replaceAll(Integer.toString(e.getKey()), e.getValue());
-				uncompressed.addLast(temp);
+				temp = temp.replaceAll("\\b" + Integer.toString(e.getKey()) + "\\b", e.getValue());
 			}
+			uncompressed.addLast(temp);
 			wordScanner.close();
 		}
 		return uncompressed;

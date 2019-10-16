@@ -24,7 +24,9 @@ import edu.ncsu.csc316.dsa.list.List;
 public class CompressionManagerTest {
 	
 	public String validUncompressed1 = "input/fleaFly.txt";
+	public String validUncompressed2 = "input/piazza.txt";
 	public String validCompressed1 = "input/fleaFly.316";
+	public String validCompressed2 = "input/piazza.316";
 	public CompressionManager tester;
 
 	/**
@@ -44,6 +46,8 @@ public class CompressionManagerTest {
 		try {
 			tester.processFile(validUncompressed1, "output");
 			checkFiles("output/fleaFlyExpected.316", "output/fleaFly.316");
+			tester.processFile(validUncompressed2, "output");
+			checkFiles("output/piazzaExpected.316", "output/piazza.316");
 		} catch(IOException e) {
 			fail();
 		}
@@ -51,6 +55,8 @@ public class CompressionManagerTest {
 		try {
 			tester.processFile(validCompressed1, "output");
 			checkFiles("output/fleaFlyExpected.txt", "output/fleaFly.txt");
+			tester.processFile(validCompressed2, "output");
+			checkFiles("output/piazzaExpected.txt", "output/piazza.txt");
 		} catch(IOException e) {
 			fail();
 		}
