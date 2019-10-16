@@ -207,7 +207,7 @@ public class CompressionManager {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("Most Frequent Words Report [\n");
-		for (int i = 0; i < numberOfWords; i++) {
+		for (int i = 0; i < sortedWords.size(); i++) {
 			sb.append("   ");
 			sb.append(sortedWords.get(i));
 			sb.append("\n");
